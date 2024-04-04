@@ -55,9 +55,11 @@ class Account {
 // Define the Bank class
 class Bank {
     private List<Account> accounts;
+    private String BankName;
 
-    public Bank() {
+    public Bank(String BankName) {
         this.accounts = new ArrayList<>();
+        this.BankName = BankName;
     }
 
     public void addAccount(Account account) {
@@ -69,7 +71,7 @@ class Bank {
         if (accounts.contains(account))
             accounts.remove(account);
         else
-            System.out.println("Account not found!");
+            System.out.println("No accounts found!");
     }
 
     public Account getAccount(int accountNumber, int pin) {
@@ -80,15 +82,71 @@ class Bank {
         }
         return null;
     }
+
+    public Account getAccount(long accountNumber, int pin) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getAccount'");
+    }
+}
+
+class Admin {
+    private int userid;
+    private int password;
+    Scanner sc = new Scanner(System.in);
+
+    private List<Bank> banks;
+
+    public Admin(int userid, int password) {
+        this.banks = new ArrayList<>();
+        this.userid = userid;
+        this.password = password;
+    }
+
+    public void display() {
+        for (Bank a : banks) {
+            System.out.println(a);
+        }
+    }
+
+    public boolean verify(int userid, int pass) {
+        return this.userid == userid && this.password == pass;
+    }
+
+    public void addBank() {
+        System.out.println("Bank Name");
+        String name = sc.next();
+        Bank b1 = new Bank(name);
+        if (banks.contains(b1))
+            System.out.println("Bank is already added");
+        else {
+            banks.add(b1);
+            System.out.println("Bank added successfully");
+        }
+    }
+
+    public void removeBank() {
+        display();
+        System.out.println("Enter the index of the bank to remove");
+        int index = sc.nextInt();
+        if (index >= 0 && index < banks.size()) {
+            banks.remove(index);
+            System.out.println("Bank removed successfully.");
+        } else {
+            System.out.println("Invalid bank index.");
+        }
+    }
+
 }
 
 public class ATM {
     private Bank bank;
+    private Admin admin;
     private Scanner scanner;
 
-    public ATM(Bank bank) {
+    public ATM(Bank bank, int userid, int password) {
         this.bank = bank;
         this.scanner = new Scanner(System.in);
+        this.admin = new Admin(userid, password);
     }
 
     public void start() {
@@ -99,7 +157,8 @@ public class ATM {
             System.out.println("2. Deposit");
             System.out.println("3. Withdraw");
             System.out.println("4. Change PIN");
-            System.out.println("5. Exit");
+            System.out.println("5. Admin");
+            System.out.println("6. Exit");
             System.out.print("Enter your choice: ");
             choice = scanner.nextInt();
 
@@ -117,17 +176,53 @@ public class ATM {
                     changePin();
                     break;
                 case 5:
+                    admin();
+                    break;
+                case 6:
                     System.out.println("Thank you for using ATM. Goodbye!");
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
-        } while (choice != 5);
+        } while (choice != 6);
+    }
+
+    private void admin() {
+        System.out.println("Enter the admin userid");
+        int userid = scanner.nextInt();
+        System.out.println("Enter the password:");
+        int password = scanner.nextInt();
+        if (admin.verify(userid, password)) {
+            int i = 1;
+            do {
+                System.out.println("\nAdmin Menu:");
+                System.out.println("1. List Banks");
+                System.out.println("2. Add Bank");
+                System.out.println("3. Delete Bank");
+                System.out.println("4. Back");
+                i = scanner.nextInt();
+                switch (i) {
+                    case 1:
+                        admin.display();
+                        break;
+                    case 2:
+                        admin.addBank();
+                        break;
+                    case 3:
+                        admin.removeBank();
+                        break;
+                    case 4:
+                        break;
+                    default:
+                        System.out.println("Invalid choice. Please try again.");
+                }
+            } while (i != 4);
+        }
     }
 
     private void checkBalance() {
         System.out.print("Enter account number: ");
-        int accountNumber = scanner.nextInt();
+        long accountNumber = scanner.nextLong();
         System.out.print("Enter PIN: ");
         int pin = scanner.nextInt();
 
@@ -141,7 +236,7 @@ public class ATM {
 
     private void deposit() {
         System.out.print("Enter account number: ");
-        int accountNumber = scanner.nextInt();
+        Long accountNumber = scanner.nextLong();
         System.out.print("Enter PIN: ");
         int pin = scanner.nextInt();
 
@@ -188,11 +283,14 @@ public class ATM {
     }
 
     public static void main(String[] args) {
-        Bank bank = new Bank();
+        Bank bank1 = new Bank("KVB");
+        Bank bank2 = new Bank("IOB");
         // Add some sample accounts
-        bank.addAccount(new Account("Ranjith", 123456789, 1000.0, 1234));
-        bank.addAccount(new Account("Sanjay", 987654321, 500.0, 4321));
-        ATM atm = new ATM(bank);
+        bank1.addAccount(new Account("Ranjith", 123456789, 1000.0, 1234));
+        bank1.addAccount(new Account("Sanjay", 987654321, 500.0, 4321));
+        bank2.addAccount(new Account("Ranjith", 9791383135l, 1000.0, 1234));
+        bank2.addAccount(new Account("Sanjay", 9876543210l, 500.0, 4321));
+        ATM atm = new ATM(bank1, 8056, 1698);
         atm.start();
     }
 }
