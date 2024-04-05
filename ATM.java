@@ -1,152 +1,25 @@
-import java.util.ArrayList;
-import java.util.List;
+
+// import java.util.ArrayList;
+// import java.util.List;
 import java.util.Scanner;
 
+// import Account;
+// import Admin;
+// import Bank;
+
 // Define the Account class
-class Account {
-    private String name;
-    private long accountNumber;
-    private double balance;
-    private int pin;
-
-    public Account(String name, long accountNumber, double balance, int pin) {
-        this.accountNumber = accountNumber;
-        this.balance = balance;
-        this.pin = pin;
-        this.name = name;
-    }
-
-    public long getAccountNumber() {
-        return accountNumber;
-    }
-
-    public double getBalance() {
-        return balance;
-    }
-
-    public void deposit(double amount) {
-        balance += amount;
-        System.out.println("Deposit successful. Current balance: " + balance);
-    }
-
-    public void withdraw(double amount) {
-        if (balance >= amount) {
-            balance -= amount;
-            System.out.println("Withdrawal successful. Current balance: " + balance);
-        } else {
-            System.out.println("Insufficient funds. Withdrawal failed.");
-        }
-    }
-
-    public boolean verifyPin(int pin) {
-        return this.pin == pin;
-    }
-
-    public void changePin(int oldPin, int newPin) {
-        if (verifyPin(oldPin)) {
-            pin = newPin;
-            System.out.println("PIN changed successfully.");
-        } else {
-            System.out.println("Incorrect PIN. PIN change failed.");
-        }
-    }
-}
 
 // Define the Bank class
-class Bank {
-    private List<Account> accounts;
-    private String BankName;
-
-    public Bank(String BankName) {
-        this.accounts = new ArrayList<>();
-        this.BankName = BankName;
-    }
-
-    public void addAccount(Account account) {
-        accounts.add(account);
-        System.out.println("Account added successfully.");
-    }
-
-    public void removeAccount(Account account) {
-        if (accounts.contains(account))
-            accounts.remove(account);
-        else
-            System.out.println("No accounts found!");
-    }
-
-    public Account getAccount(int accountNumber, int pin) {
-        for (Account account : accounts) {
-            if (account.getAccountNumber() == accountNumber && account.verifyPin(pin)) {
-                return account;
-            }
-        }
-        return null;
-    }
-
-    public Account getAccount(long accountNumber, int pin) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAccount'");
-    }
-}
-
-class Admin {
-    private int userid;
-    private int password;
-    Scanner sc = new Scanner(System.in);
-
-    private List<Bank> banks;
-
-    public Admin(int userid, int password) {
-        this.banks = new ArrayList<>();
-        this.userid = userid;
-        this.password = password;
-    }
-
-    public void display() {
-        for (Bank a : banks) {
-            System.out.println(a);
-        }
-    }
-
-    public boolean verify(int userid, int pass) {
-        return this.userid == userid && this.password == pass;
-    }
-
-    public void addBank() {
-        System.out.println("Bank Name");
-        String name = sc.next();
-        Bank b1 = new Bank(name);
-        if (banks.contains(b1))
-            System.out.println("Bank is already added");
-        else {
-            banks.add(b1);
-            System.out.println("Bank added successfully");
-        }
-    }
-
-    public void removeBank() {
-        display();
-        System.out.println("Enter the index of the bank to remove");
-        int index = sc.nextInt();
-        if (index >= 0 && index < banks.size()) {
-            banks.remove(index);
-            System.out.println("Bank removed successfully.");
-        } else {
-            System.out.println("Invalid bank index.");
-        }
-    }
-
-}
 
 public class ATM {
     private Bank bank;
     private Admin admin;
     private Scanner scanner;
 
-    public ATM(Bank bank, int userid, int password) {
+    public ATM(Bank bank) {
         this.bank = bank;
         this.scanner = new Scanner(System.in);
-        this.admin = new Admin(userid, password);
+        this.admin = new Admin();
     }
 
     public void start() {
@@ -284,13 +157,8 @@ public class ATM {
 
     public static void main(String[] args) {
         Bank bank1 = new Bank("KVB");
-        Bank bank2 = new Bank("IOB");
-        // Add some sample accounts
-        bank1.addAccount(new Account("Ranjith", 123456789, 1000.0, 1234));
-        bank1.addAccount(new Account("Sanjay", 987654321, 500.0, 4321));
-        bank2.addAccount(new Account("Ranjith", 9791383135l, 1000.0, 1234));
-        bank2.addAccount(new Account("Sanjay", 9876543210l, 500.0, 4321));
-        ATM atm = new ATM(bank1, 8056, 1698);
+        Admin ad = new Admin();
+        ATM atm = new ATM(bank1);
         atm.start();
     }
 }
