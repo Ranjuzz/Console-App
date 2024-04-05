@@ -4,7 +4,7 @@ public class Admin {
     private int userid;
     private int password;
     Scanner sc = new Scanner(System.in);
-    private List<Bank> banks;
+    public ArrayList<Bank> banks;
     // private Bank ab;
 
     Admin() {
@@ -14,7 +14,7 @@ public class Admin {
         DefaultBanks();
     }
 
-    private void DefaultBanks() {
+    public void DefaultBanks() {
         Bank bank1 = new Bank("IOB");
         Bank bank2 = new Bank("KVB");
 
@@ -24,6 +24,13 @@ public class Admin {
 
         banks.add(bank1);
         banks.add(bank2);
+
+        // ATM atm = new ATM(banks);
+    }
+
+    public void bankstart() {
+        ATM atm = new ATM(banks);
+        atm.start();
     }
 
     public void addBank(Bank bank) {

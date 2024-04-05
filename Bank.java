@@ -1,7 +1,7 @@
 import java.util.*;;
 
 public class Bank {
-    private List<Account> accounts;
+    public ArrayList<Account> accounts;
     private String BankName;
 
     public Bank(String BankName) {
@@ -11,6 +11,14 @@ public class Bank {
 
     public String dispname() {
         return this.BankName;
+    }
+
+    public boolean verifyacc(long accountNumber, int pin) {
+        for (Account a : accounts) {
+            if (a.getAccountNumber() == accountNumber)
+                return a.pin == pin;
+        }
+        return false;
     }
 
     public void addAccount(Account account) {

@@ -1,6 +1,8 @@
 
 // import java.util.ArrayList;
 // import java.util.List;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 // import Account;
@@ -12,13 +14,13 @@ import java.util.Scanner;
 // Define the Bank class
 
 public class ATM {
-    private Bank bank;
+    private ArrayList<Bank> banks;
     private Admin admin;
     private Scanner scanner;
     private long money = 50000;
 
-    public ATM(Bank bank) {
-        this.bank = bank;
+    public ATM(ArrayList<Bank> banks) {
+        this.banks = banks;
         this.scanner = new Scanner(System.in);
         this.admin = new Admin();
     }
@@ -99,12 +101,7 @@ public class ATM {
     }
 
     private void checkBalance() {
-        System.out.print("Enter account number: ");
-        long accountNumber = scanner.nextLong();
-        System.out.print("Enter PIN: ");
-        int pin = scanner.nextInt();
-
-        Account account = bank.getAccount(accountNumber, pin);
+        Account account = account_check();
         if (account != null) {
             System.out.println("Your current balance is: " + account.getBalance());
         } else {
@@ -116,13 +113,23 @@ public class ATM {
         return money;
     }
 
-    private void deposit() {
+    public Account account_check() {
         System.out.print("Enter account number: ");
-        Long accountNumber = scanner.nextLong();
+        long accountNumber = scanner.nextLong();
         System.out.print("Enter PIN: ");
         int pin = scanner.nextInt();
+        for (Bank b : banks) {
+            for (Account a : b.accounts) {
+                if (a.getAccountNumber() == accountNumber && a.verifyPin(pin)) {
+                    return a;
+                }
+            }
+        }
+        return null;
+    }
 
-        Account account = bank.getAccount(accountNumber, pin);
+    private void deposit() {
+        Account account = account_check();
         if (account != null) {
             System.out.print("Enter deposit amount: ");
             double amount = scanner.nextDouble();
@@ -134,12 +141,7 @@ public class ATM {
     }
 
     private void withdraw() {
-        System.out.print("Enter account number: ");
-        int accountNumber = scanner.nextInt();
-        System.out.print("Enter PIN: ");
-        int pin = scanner.nextInt();
-
-        Account account = bank.getAccount(accountNumber, pin);
+        Account account = account_check();
         if (account != null) {
             System.out.print("Enter withdrawal amount: ");
             double amount = scanner.nextDouble();
@@ -151,13 +153,10 @@ public class ATM {
     }
 
     private void changePin() {
-        System.out.print("Enter account number: ");
-        int accountNumber = scanner.nextInt();
-        System.out.print("Enter old PIN: ");
-        int oldPin = scanner.nextInt();
-
-        Account account = bank.getAccount(accountNumber, oldPin);
+        Account account = account_check();
         if (account != null) {
+            System.out.print("Enter old PIN: ");
+            int oldPin = scanner.nextInt();
             System.out.print("Enter new PIN: ");
             int newPin = scanner.nextInt();
             account.changePin(oldPin, newPin);
@@ -167,9 +166,15 @@ public class ATM {
     }
 
     public static void main(String[] args) {
-        Bank bank1 = new Bank("KVB");
+        // Bank bank1 = new Bank("KVB");
+        // Bank bank1 = new Bank("IOB");
+        // Bank bank2 = new Bank("KVB");
+        // bank1.addAccount(new Account("Venk", 1234567890, 1000.0, 1234));
+        // bank1.addAccount(new Account("udhay", 9876543210l, 500.0, 4321));
+        // bank2.addAccount(new Account("Anu", 1234567890, 1500.0, 5678));
         Admin ad = new Admin();
-        ATM atm = new ATM(bank1);
-        atm.start();
+        ad.bankstart();
+        // ATM atm = new ATM(bank1);
+        // atm.start();
     }
 }

@@ -2,7 +2,7 @@ public class Account {
     private String name;
     private long accountNumber;
     private double balance;
-    private int pin;
+    public int pin;
 
     public Account(String name, long accountNumber, double balance, int pin) {
         this.accountNumber = accountNumber;
