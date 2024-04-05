@@ -9,6 +9,10 @@ public class Bank {
         this.BankName = BankName;
     }
 
+    public String dispname() {
+        return this.BankName;
+    }
+
     public void addAccount(Account account) {
         accounts.add(account);
         // System.out.println("Account added successfully.");

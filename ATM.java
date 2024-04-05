@@ -15,6 +15,7 @@ public class ATM {
     private Bank bank;
     private Admin admin;
     private Scanner scanner;
+    private long money = 50000;
 
     public ATM(Bank bank) {
         this.bank = bank;
@@ -72,7 +73,8 @@ public class ATM {
                 System.out.println("1. List Banks");
                 System.out.println("2. Add Bank");
                 System.out.println("3. Delete Bank");
-                System.out.println("4. Back");
+                System.out.println("4. Atm Balance");
+                System.out.println("5. Back");
                 i = scanner.nextInt();
                 switch (i) {
                     case 1:
@@ -85,6 +87,9 @@ public class ATM {
                         admin.removeBank();
                         break;
                     case 4:
+                        System.out.println(atmbal());
+                        break;
+                    case 5:
                         break;
                     default:
                         System.out.println("Invalid choice. Please try again.");
@@ -107,6 +112,10 @@ public class ATM {
         }
     }
 
+    public long atmbal() {
+        return money;
+    }
+
     private void deposit() {
         System.out.print("Enter account number: ");
         Long accountNumber = scanner.nextLong();
@@ -118,6 +127,7 @@ public class ATM {
             System.out.print("Enter deposit amount: ");
             double amount = scanner.nextDouble();
             account.deposit(amount);
+            money += amount;
         } else {
             System.out.println("Account not found or PIN incorrect.");
         }
@@ -134,6 +144,7 @@ public class ATM {
             System.out.print("Enter withdrawal amount: ");
             double amount = scanner.nextDouble();
             account.withdraw(amount);
+            money -= amount;
         } else {
             System.out.println("Account not found or PIN incorrect.");
         }

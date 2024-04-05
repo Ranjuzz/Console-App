@@ -28,12 +28,12 @@ public class Admin {
 
     public void addBank(Bank bank) {
         banks.add(bank);
-        System.out.println("Bank added Succefuuly");
+        System.out.println(bank.dispname() + " bank  added Succefuuly");
     }
 
     public void display() {
-        for (Bank a : banks) {
-            System.out.println(a);
+        for (int i = 0; i < banks.size(); i++) {
+            System.out.println(i + "." + banks.get(i).dispname());
         }
     }
 
